@@ -2,24 +2,30 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: my-rds
+  namespace: dev
 spec:
   components:
     - name: dev-db
-      type: alibaba-rds
+      type: aws-rds
       properties:
-        instance_name: dev-db
+        create_db_subnet_group: true
+        db_subnet_group_description: This is the subnet group description
+        db_subnet_group_name: dbsubnetgroup
+        subnet_ids: ["subnet-0f8de9a5b69205ce5", "subnet-02335369468be2b7b", "subnet-079f42a9d954241aa"]
+        vpc_security_group_ids: ["sg-0d1abc48b59fa6f38"]
+        instance_class: "db.m5.large"
+        identifier: dev-db
+        username: masteruser
+        engine: postgres
+        engine_version: "14.1"
+        family: "postgres14"
         account_name: dev
-        password: my-password
+        skip_final_snapshot: true
+        publicly_accessible: true
+        allocated_storage: 27
+        password: resuretsam
         writeConnectionSecretToRef:
           name: dev-db-conn
-    - name: prod-db
-      type: alibaba-rds
-      properties:
-        instance_name: prod-db
-        account_name: prod
-        password: my-password
-        writeConnectionSecretToRef:
-          name: prod-db-conn
 
   workflow:
     steps:
@@ -32,26 +38,8 @@ spec:
         properties:
           slack:
             url:
-              fromSecret:
+              secretRef:
                 name: my-secret
                 key: slack
             message:
               text: "Successfully apply the database in dev cluster."
-
-      - name: manual-approval
-        type: suspend
-
-      - name: deploy-prod-db
-        type: apply-component
-        properties:
-          component: prod-db
-      - name: prod-notification
-        type: webhook-notification
-        properties:
-          slack:
-            url:
-              fromSecret:
-                name: my-secret
-                key: slack
-            message:
-              text: "Successfully apply the database in prod cluster."
