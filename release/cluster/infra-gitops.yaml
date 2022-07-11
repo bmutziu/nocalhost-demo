@@ -9,7 +9,7 @@ spec:
     properties:
       repoType: git
       url: https://github.com/bmutziu/nocalhost-demo
-      pullInterval: 1m
+      pullInterval: 10m
       git:
         branch: master
       path: ./release/infrastructure
