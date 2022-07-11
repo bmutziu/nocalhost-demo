@@ -2,46 +2,28 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: my-app
-  namespace: default
 spec:
   components:
   - name: my-app
+    type: webservice
     properties:
       image: ghcr.io/fogdong/nocalhost-demo:master-28917c57-1635860530
+      port: 9080
     traits:
     - properties:
-        replicas: 1
-      type: scaler
-    - properties:
-        command:
-          debug:
-          - sh
-          - debug.sh
-          run:
-          - sh
-          - run.sh
-        hotReload: true
         image: go
         port: 9080
-        resources:
-          limits:
-            cpu: "2"
-            memory: 2Gi
-        serviceType: deployment
-        shell: bash
+        gitUrl: https://github.com/bmutziu/nocalhost-demo.git
         sync:
-          filePattern:
-          - ./
-          ignoreFilePattern:
-          - .git
-          - .vscode
-          - .idea
-          - .gradle
-          - build
           type: sendReceive
-        workDir: /home/nocalhost-dev
+        debug:
+          remoteDebugPort: 9009
       type: nocalhost
-    type: webservice
+    - properties:
+        domain: test.127.0.0.1.nip.io
+        http:
+          /: 9080
+      type: gateway
   workflow:
     steps:
     - name: default

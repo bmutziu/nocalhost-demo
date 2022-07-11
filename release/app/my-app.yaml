@@ -24,7 +24,7 @@ spec:
         - type: nocalhost
           properties:
             port: 9080
-            gitUrl: https://github.com/FogDong/nocalhost-demo.git
+            gitUrl: https://github.com/bmutziu/nocalhost-demo.git
             image: go
             sync:
               type: sendReceive
