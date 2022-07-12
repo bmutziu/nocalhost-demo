@@ -2,24 +2,25 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: my-app
+  namespace: dev
 spec:
   components:
     - name: my-server
       type: webservice
       properties:
-        image: ghcr.io/bmutziu/nocalhost-demo:master-b28da47a-1657576067 # {"$imagepolicy": "default:app-gitops"}
+        image: ghcr.io/bmutziu/nocalhost-demo:master-b28da47a-1657576067 # {"$imagepolicy": "dev:app-gitops"}
         port: 9080
         env:
           - name: DB_HOST
             valueFrom:
               secretKeyRef:
                 name: dev-db-conn
-                key: DB_HOST
+                key: db_instance_address
           - name: DB_USER
             valueFrom:
               secretKeyRef:
                 name: dev-db-conn
-                key: DB_USER
+                key: db_instance_username
       traits:
         - type: nocalhost
           properties:
@@ -30,7 +31,7 @@ spec:
               type: sendReceive
             debug:
               remoteDebugPort: 9009
-        - type: ingress
+        - type: gateway
           properties:
             domain: dev.bmutziu.me
             http:
@@ -56,7 +57,7 @@ spec:
                 - name: my-server
                   type: webservice
                   traits:
-                    - type: ingress
+                    - type: gateway
                       properties:
                         domain: prod.bmutziu.me
   workflow:
@@ -70,6 +71,7 @@ spec:
           apiVersion: v1
           kind: Secret
           name: dev-db-conn
+          namespace: dev
       - name: apply-dev-secret
         type: apply-object
         inputs:
@@ -81,6 +83,7 @@ spec:
             kind: Secret
             metadata:
               name: dev-db-conn
+              namespace: dev
           cluster: cluster-dev
       - name: deploy-dev
         type: deploy2env
@@ -92,7 +95,7 @@ spec:
         properties:
           slack:
             url:
-              fromSecret:
+              secretRef:
                 name: my-secret
                 key: slack
             message:
@@ -108,6 +111,7 @@ spec:
           apiVersion: v1
           kind: Secret
           name: prod-db-conn
+          namespace: prod
       - name: apply-prod-secret
         type: apply-object
         inputs:
@@ -119,6 +123,7 @@ spec:
             kind: Secret
             metadata:
               name: dev-db-conn
+              namespace: prod
           cluster: cluster-prod
       - name: deploy-prod
         type: deploy2env
@@ -130,7 +135,7 @@ spec:
         properties:
           slack:
             url:
-              fromSecret:
+              secretRef:
                 name: my-secret
                 key: slack
             message:
