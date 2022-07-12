@@ -7,11 +7,14 @@ spec:
   - name: my-app
     type: webservice
     properties:
-      image: ghcr.io/fogdong/nocalhost-demo:master-28917c57-1635860530
+      image: ghcr.io/bmutziu/nocalhost-demo:master-ce98b54e-1657631277
       port: 9080
     traits:
     - properties:
-        image: go
+        replicas: 1
+      type: scaler  
+    - properties:
+        image: ghcr.io/nocalhost/dev-container/golang:latest@sha256:e379e32a2921d2e4f80c5d32a1965ce4d52bb15d03a0a8a7b43eb6a413e55b44
         port: 9080
         gitUrl: https://github.com/bmutziu/nocalhost-demo.git
         sync:
@@ -24,6 +27,11 @@ spec:
         http:
           /: 9080
       type: gateway
+  policies:
+    - name: apply-once
+      type: apply-once
+      properties:
+        enable: true
   workflow:
     steps:
     - name: default
