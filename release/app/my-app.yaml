@@ -7,7 +7,7 @@ spec:
     - name: my-server
       type: webservice
       properties:
-        image: ghcr.io/fogdong/nocalhost-demo:master-28917c57-1635860530 # {"$imagepolicy": "default:app-gitops"}
+        image: ghcr.io/bmutziu/nocalhost-demo:master-b28da47a-1657576067 # {"$imagepolicy": "default:app-gitops"}
         port: 9080
         env:
           - name: DB_HOST
@@ -32,7 +32,7 @@ spec:
               remoteDebugPort: 9009
         - type: ingress
           properties:
-            domain: dev.cc502b2b97a5c4f16a1d01f9217926e85.cn-hongkong.alicontainer.com
+            domain: dev.bmutziu.me
             http:
               /: 9080
   policies:
@@ -58,7 +58,7 @@ spec:
                   traits:
                     - type: ingress
                       properties:
-                        domain: prod.ca89a4a90fcd345029f1a89d36ecdc6f9.cn-hongkong.alicontainer.com
+                        domain: prod.bmutziu.me
   workflow:
     steps:
       - name: read-dev-secret
