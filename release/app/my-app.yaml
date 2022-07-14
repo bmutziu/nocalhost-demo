@@ -60,6 +60,18 @@ spec:
               components:
                 - name: my-server
                   type: webservice
+                  properties:    
+                    env:
+                      - name: DB_HOST
+                        valueFrom:
+                          secretKeyRef:
+                            name: prod-db-conn
+                            key: db_instance_address
+                      - name: DB_USER
+                        valueFrom:   
+                          secretKeyRef:
+                            name: prod-db-conn 
+                            key: db_instance_username 
                   traits:
                     - type: gateway
                       properties:
