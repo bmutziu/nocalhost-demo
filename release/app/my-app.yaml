@@ -26,7 +26,7 @@ spec:
           properties:
             port: 9080
             gitUrl: https://github.com/bmutziu/nocalhost-demo.git
-            image: ghcr.io/nocalhost/dev-container/golang:latest@sha256:414fc4c3dca8fa440d0a1e1dec6b20f6d950e3591a064a733c1c1477268f86c4
+            image: go
             sync:
               type: sendReceive
             debug:
