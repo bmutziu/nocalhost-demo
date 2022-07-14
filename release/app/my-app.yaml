@@ -8,7 +8,7 @@ spec:
     - name: my-server
       type: webservice
       properties:
-        image: ghcr.io/bmutziu/nocalhost-demo:master-8babdcd3-1657800680 # {"$imagepolicy": "demo:app-gitops"}
+        image: ghcr.io/bmutziu/nocalhost-demo:master-c3d9d0a2-1657802483 # {"$imagepolicy": "demo:app-gitops"}
         port: 9080
         env:
           - name: DB_HOST
@@ -26,7 +26,7 @@ spec:
           properties:
             port: 9080
             gitUrl: https://github.com/bmutziu/nocalhost-demo.git
-            image: ghcr.io/nocalhost/dev-container/golang:latest@sha256:e379e32a2921d2e4f80c5d32a1965ce4d52bb15d03a0a8a7b43eb6a413e55b44
+            image: ghcr.io/nocalhost/dev-container/golang:latest@sha256:414fc4c3dca8fa440d0a1e1dec6b20f6d950e3591a064a733c1c1477268f86c4
             sync:
               type: sendReceive
             debug:
