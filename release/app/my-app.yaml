@@ -53,7 +53,7 @@ spec:
           - name: prod
             placement:
               clusterSelector:
-                name: cluster-prod
+                name: cluster-dev
               namespaceSelector:
                 name: prod
             patch:
