@@ -2,13 +2,13 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: my-app
-  namespace: dev
+  namespace: demo
 spec:
   components:
     - name: my-server
       type: webservice
       properties:
-        image: ghcr.io/bmutziu/nocalhost-demo:master-ce98b54e-1657631277 # {"$imagepolicy": "dev:app-gitops"}
+        image: ghcr.io/bmutziu/nocalhost-demo:master-ce98b54e-1657631277 # {"$imagepolicy": "demo:app-gitops"}
         port: 9080
         env:
           - name: DB_HOST
@@ -26,7 +26,7 @@ spec:
           properties:
             port: 9080
             gitUrl: https://github.com/bmutziu/nocalhost-demo.git
-            image: go
+            image: ghcr.io/nocalhost/dev-container/golang:latest@sha256:e379e32a2921d2e4f80c5d32a1965ce4d52bb15d03a0a8a7b43eb6a413e55b44
             sync:
               type: sendReceive
             debug:
@@ -71,7 +71,7 @@ spec:
           apiVersion: v1
           kind: Secret
           name: dev-db-conn
-          namespace: dev
+          namespace: demo
       - name: apply-dev-secret
         type: apply-object
         inputs:
@@ -99,7 +99,7 @@ spec:
                 name: my-secret
                 key: slack
             message:
-              text: "Successfully apply the app in dev cluster."
+              text: "Successfully applied the app in dev cluster"
       - name: manual-approval
         type: suspend
       - name: read-prod-secret
@@ -111,7 +111,7 @@ spec:
           apiVersion: v1
           kind: Secret
           name: prod-db-conn
-          namespace: prod
+          namespace: demo
       - name: apply-prod-secret
         type: apply-object
         inputs:
@@ -122,7 +122,7 @@ spec:
             apiVersion: v1
             kind: Secret
             metadata:
-              name: dev-db-conn
+              name: prod-db-conn
               namespace: prod
           cluster: cluster-prod
       - name: deploy-prod
@@ -139,4 +139,4 @@ spec:
                 name: my-secret
                 key: slack
             message:
-              text: "Successfully apply the app in prod cluster."
+              text: "Successfully applied the app in prod cluster"
