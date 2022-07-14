@@ -8,7 +8,7 @@ spec:
     - name: my-server
       type: webservice
       properties:
-        image: ghcr.io/bmutziu/nocalhost-demo:master-1f3d1c20-1657807738 # {"$imagepolicy": "demo:app-gitops"}
+        image: ghcr.io/bmutziu/nocalhost-demo:master-344eafb4-1657809077 # {"$imagepolicy": "demo:app-gitops"}
         port: 9080
         env:
           - name: DB_HOST
