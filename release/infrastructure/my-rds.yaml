@@ -1,0 +1,84 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: my-rds
+  namespace: demo
+spec:
+  components:
+    - name: dev-db
+      type: aws-rds
+      properties:
+        create_db_subnet_group: true
+        db_subnet_group_description: This is the subnet group description
+        db_subnet_group_name: devdbsubnetgroup
+        subnet_ids: ["subnet-0388a84c6e890fe7c", "subnet-0b9b2c6db0d86683e", "subnet-069e5b5d0ace01e26"]
+        vpc_security_group_ids: ["sg-01c1a716afab5f910"]
+        instance_class: "db.m5.large"
+        identifier: dev-db
+        username: devmasteruser
+        engine: postgres
+        engine_version: "14.1"
+        family: "postgres14"
+        account_name: dev
+        skip_final_snapshot: true
+        publicly_accessible: true
+        allocated_storage: 27
+        password: resuretsamved
+        writeConnectionSecretToRef:
+          name: dev-db-conn
+    - name: prod-db
+      type: aws-rds
+      properties:
+        create_db_subnet_group: true
+        db_subnet_group_description: This is the subnet group description
+        db_subnet_group_name: proddbsubnetgroup
+        subnet_ids: ["subnet-0388a84c6e890fe7c", "subnet-0b9b2c6db0d86683e", "subnet-069e5b5d0ace01e26"]
+        vpc_security_group_ids: ["sg-01c1a716afab5f910"]
+        instance_class: "db.m5.large"
+        identifier: prod-db
+        username: prodmasteruser
+        engine: postgres
+        engine_version: "14.1"
+        family: "postgres14"
+        account_name: prod
+        skip_final_snapshot: true
+        publicly_accessible: true
+        allocated_storage: 27
+        password: resuretsamdorp
+        writeConnectionSecretToRef:
+          name: prod-db-conn
+
+  workflow:
+    steps:
+      - name: deploy-dev-db
+        type: apply-component
+        properties:
+          component: dev-db
+      - name: dev-notification
+        type: webhook-notification
+        properties:
+          slack:
+            url:
+              secretRef:
+                name: my-secret
+                key: slack
+            message:
+              text: "Successfully applied the database in dev cluster"
+
+      - name: manual-approval
+        type: suspend
+
+      - name: deploy-prod-db
+        type: apply-component
+        properties:
+          component: prod-db
+      - name: prod-notification
+        type: webhook-notification
+        properties:
+          slack:
+            url:
+              secretRef:
+                name: my-secret
+                key: slack
+            message:
+              text: "Successfully applied the database in prod cluster" 
