@@ -45,6 +45,8 @@ spec:
             placement:
               clusterSelector:
                 name: cluster-dev
+              namespaceSelector:
+                name: dev
             selector:
               components:
                 - my-server
@@ -52,6 +54,8 @@ spec:
             placement:
               clusterSelector:
                 name: cluster-prod
+              namespaceSelector:
+                name: prod
             patch:
               components:
                 - name: my-server
