@@ -8,7 +8,7 @@ spec:
     - name: my-server
       type: webservice
       properties:
-        image: ghcr.io/bmutziu/nocalhost-demo:master-344eafb4-1657809077 # {"$imagepolicy": "demo:app-gitops"}
+        image: ghcr.io/bmutziu/nocalhost-demo:master-87fcecfe-1657809664 # {"$imagepolicy": "demo:app-gitops"}
         port: 9080
         env:
           - name: DB_HOST
@@ -60,7 +60,7 @@ spec:
               components:
                 - name: my-server
                   type: webservice
-                  properties:    
+                  properties:
                     env:
                       - name: DB_HOST
                         valueFrom:
@@ -68,10 +68,10 @@ spec:
                             name: prod-db-conn
                             key: db_instance_address
                       - name: DB_USER
-                        valueFrom:   
+                        valueFrom:
                           secretKeyRef:
-                            name: prod-db-conn 
-                            key: db_instance_username 
+                            name: prod-db-conn
+                            key: db_instance_username
                   traits:
                     - type: gateway
                       properties:
